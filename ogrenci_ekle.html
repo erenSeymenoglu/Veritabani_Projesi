@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Öğrenci Ekle</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2 class="page-title">👤 Yeni Öğrenci Kaydı</h2>
+    <form class="form-card" action="ogrenci_ekle.php" method="POST">
+      <div class="form-group">
+        <label>Ad</label>
+        <input type="text" name="ad" required>
+      </div>
+      <div class="form-group">
+        <label>Soyad</label>
+        <input type="text" name="soyad" required>
+      </div>
+      <div class="form-group">
+        <label>TC No</label>
+        <input type="text" name="tc" maxlength="11">
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="tel" name="telefon">
+      </div>
+      <div class="form-group">
+        <label>Doğum Tarihi</label>
+        <input type="date" name="dogum_tarihi">
+      </div>
+      <div class="form-group">
+        <label>Ehliyet Sınıfı</label>
+        <select name="ehliyet_sinifi">
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">➕ Kaydet</button>
+    </form>
+    
+
+    <div style="margin-top: 20px; text-align: left;">
+      <a href="index.html" class="btn-primary" style="display: inline-block; text-decoration: none;">🏠 Ana Sayfaya Dön</a>
+    </div>
+  </div>
+</body>
+</html>

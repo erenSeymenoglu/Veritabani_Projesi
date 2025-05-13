@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ödeme Girişi</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h2>Ödeme Bilgisi Girişi</h2>
+  <form method="POST" action="odeme_ekle.php">
+    <label>Öğrenci TC:</label><input type="text" name="ogrenci_tc" required><br>
+    <label>Tutar:</label><input type="number" name="tutar" required><br>
+    <label>Tarih:</label><input type="date" name="tarih" required><br>
+    <label>Açıklama:</label><input type="text" name="aciklama" required><br>
+    <button type="submit">Kaydet</button>
+  </form>
+  <div style="margin-top: 20px; text-align: left;">
+    <a href="index.html" class="btn-primary" style="display: inline-block; text-decoration: none;">🏠 Ana Sayfaya Dön</a>
+  </div>
+</body>
+</html>

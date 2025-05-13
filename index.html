@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Yönetim Paneli</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background-color: #2c3e50;
+      padding: 10px 0;
+      color: white;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #34495e;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 14px 20px;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #1abc9c;
+    }
+
+    /* Açılır menü */
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #34495e;
+      min-width: 180px;
+      z-index: 1000;
+    }
+
+    nav ul li:hover ul {
+      display: block;
+    }
+
+    nav ul li ul li {
+      width: 100%;
+    }
+
+    nav ul li ul li a {
+      padding: 12px 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sürücü Kursu Yönetim Paneli</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="#">👨‍🎓 Öğrenciler</a>
+        <ul>
+          <li><a href="ogrenci_ekle.html">Öğrenci Ekle</a></li>
+          <li><a href="ogrenci_listele.php">Öğrenci Listele</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">👨‍🏫 Eğitmenler</a>
+        <ul>
+          <li><a href="egitmen_ekle.html">Eğitmen Ekle</a></li>
+          <li><a href="egitmen_listele.php">Eğitmen Listele</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">📚 Dersler</a>
+        <ul>
+          <li><a href="ders_programi_ekle1.php">Ders Programı Ekle</a></li>
+          <li><a href="ders_programi_listele.php">Ders Programı Listele</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">💰 Ödemeler</a>
+        <ul>
+          <li><a href="odeme_ekle.php">Ödeme Girişi</a></li>
+          <li><a href="odeme_listele.php">Ödeme Durumları</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">🏫 Sınıflar</a>
+        <ul>
+          <li><a href="sinif_olustur1.php">Sınıf Oluşturma</a></li>
+          <li><a href="sinif_listele.php">Sınıf Listesi</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</body>
+</html>
