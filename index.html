@@ -1,117 +1,465 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Yönetim Paneli</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürücü Kursu Yönetim Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    header {
-      background-color: #2c3e50;
-      padding: 10px 0;
-      color: white;
-      text-align: center;
-    }
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #1e293b;
+            position: relative;
+        }
 
-    nav {
-      background-color: #34495e;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M50 20c16.569 0 30 13.431 30 30 0 16.569-13.431 30-30 30-16.569 0-30-13.431-30-30 0-16.569 13.431-30 30-30zm0 10c-11.046 0-20 8.954-20 20s8.954 20 20 20 20-8.954 20-20-8.954-20-20-20zm0 5c8.284 0 15 6.716 15 15s-6.716 15-15 15-15-6.716-15-15 6.716-15 15-15zm0 25c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10z'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
 
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+        .header, .main-content, .shortcuts, footer {
+            position: relative;
+            z-index: 1;
+        }
 
-    nav ul li {
-      position: relative;
-    }
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1e40af);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-    nav ul li a {
-      display: block;
-      padding: 14px 20px;
-      color: white;
-      text-decoration: none;
-      transition: background-color 0.3s;
-    }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+        }
 
-    nav ul li a:hover {
-      background-color: #1abc9c;
-    }
+        .header-content {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-    /* Açılır menü */
-    nav ul li ul {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #34495e;
-      min-width: 180px;
-      z-index: 1000;
-    }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+        }
 
-    nav ul li:hover ul {
-      display: block;
-    }
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            position: relative;
+        }
 
-    nav ul li ul li {
-      width: 100%;
-    }
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-    nav ul li ul li a {
-      padding: 12px 16px;
-    }
-  </style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .module {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .module:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+
+        .module-header {
+            background: #f8fafc;
+            padding: 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .module-header h2 {
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .module-content {
+            padding: 1.25rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .action-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            text-decoration: none;
+            color: #1e293b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            border-color: #93c5fd;
+        }
+
+        .action-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .action-card .icon {
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .action-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .action-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        /* Modül renk kodlaması */
+        .module.students { border-top: 4px solid #3b82f6; }
+        .module.teachers { border-top: 4px solid #10b981; }
+        .module.schedule { border-top: 4px solid #f59e0b; }
+        .module.payments { border-top: 4px solid #6366f1; }
+        .module.classes { border-top: 4px solid #ec4899; }
+
+        .shortcuts {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .shortcuts:hover {
+            transform: translateY(-2px);
+        }
+
+        .shortcuts h4 {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .shortcut-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #0f172a;
+        }
+
+        .shortcut-key {
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                padding: 1.5rem;
+            }
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Modern scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Sürücü Kursu Yönetim Paneli</h1>
-  </header>
+    <header class="header">
+        <div class="header-content">
+            <h1>🚗 Sürücü Kursu Yönetim Sistemi</h1>
+            <p>Tüm işlemlerinizi tek bir yerden kolayca yönetin</p>
+        </div>
+    </header>
 
-  <nav>
-    <ul>
-      <li>
-        <a href="#">👨‍🎓 Öğrenciler</a>
-        <ul>
-          <li><a href="ogrenci_ekle.html">Öğrenci Ekle</a></li>
-          <li><a href="ogrenci_listele.php">Öğrenci Listele</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">👨‍🏫 Eğitmenler</a>
-        <ul>
-          <li><a href="egitmen_ekle.html">Eğitmen Ekle</a></li>
-          <li><a href="egitmen_listele.php">Eğitmen Listele</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">📚 Dersler</a>
-        <ul>
-          <li><a href="ders_programi_ekle1.php">Ders Programı Ekle</a></li>
-          <li><a href="ders_programi_listele.php">Ders Programı Listele</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">💰 Ödemeler</a>
-        <ul>
-          <li><a href="odeme_ekle.php">Ödeme Girişi</a></li>
-          <li><a href="odeme_listele.php">Ödeme Durumları</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">🏫 Sınıflar</a>
-        <ul>
-          <li><a href="sinif_olustur1.php">Sınıf Oluşturma</a></li>
-          <li><a href="sinif_listele.php">Sınıf Listesi</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
+    <main class="main-content">
+        <div class="dashboard-grid">
+            <div class="module students">
+                <div class="module-header">
+                    <h2>👨‍🎓 Öğrenci İşlemleri</h2>
+                </div>
+                <div class="module-content">
+                    <a href="ogrenci_ekle.html" class="action-card">
+                        <span class="icon">➕</span>
+                        <h3>Öğrenci Ekle</h3>
+                        <p>Yeni öğrenci kaydı oluştur</p>
+                    </a>
+                    <a href="ogrenci_listele.php" class="action-card">
+                        <span class="icon">📋</span>
+                        <h3>Öğrenci Listesi</h3>
+                        <p>Tüm öğrencileri görüntüle</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="module teachers">
+                <div class="module-header">
+                    <h2>👨‍🏫 Eğitmen İşlemleri</h2>
+                </div>
+                <div class="module-content">
+                    <a href="egitmen_ekle.html" class="action-card">
+                        <span class="icon">➕</span>
+                        <h3>Eğitmen Ekle</h3>
+                        <p>Yeni eğitmen kaydı oluştur</p>
+                    </a>
+                    <a href="egitmen_listele.php" class="action-card">
+                        <span class="icon">📋</span>
+                        <h3>Eğitmen Listesi</h3>
+                        <p>Tüm eğitmenleri görüntüle</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="module schedule">
+                <div class="module-header">
+                    <h2>📅 Ders Programı</h2>
+                </div>
+                <div class="module-content">
+                    <a href="ders_programi_ekle1.php" class="action-card">
+                        <span class="icon">➕</span>
+                        <h3>Program Ekle</h3>
+                        <p>Yeni ders programı oluştur</p>
+                    </a>
+                    <a href="ders_programi_listele.php" class="action-card">
+                        <span class="icon">📋</span>
+                        <h3>Program Listesi</h3>
+                        <p>Tüm programları görüntüle</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="module payments">
+                <div class="module-header">
+                    <h2>💰 Ödeme İşlemleri</h2>
+                </div>
+                <div class="module-content">
+                    <a href="odeme_ekle.php" class="action-card">
+                        <span class="icon">➕</span>
+                        <h3>Ödeme Al</h3>
+                        <p>Yeni ödeme kaydı oluştur</p>
+                    </a>
+                    <a href="odeme_listele.php" class="action-card">
+                        <span class="icon">📋</span>
+                        <h3>Ödeme Listesi</h3>
+                        <p>Tüm ödemeleri görüntüle</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="module classes">
+                <div class="module-header">
+                    <h2>🏫 Sınıf İşlemleri</h2>
+                </div>
+                <div class="module-content">
+                    <a href="sinif_olustur1.php" class="action-card">
+                        <span class="icon">➕</span>
+                        <h3>Sınıf Oluştur</h3>
+                        <p>Yeni sınıf kaydı oluştur</p>
+                    </a>
+                    <a href="sinif_listele.php" class="action-card">
+                        <span class="icon">📋</span>
+                        <h3>Sınıf Listesi</h3>
+                        <p>Tüm sınıfları görüntüle</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="shortcuts">
+        <h4>Klavye Kısayolları</h4>
+        <div class="shortcut-list">
+            <div class="shortcut-item">
+                <span class="shortcut-key">O</span>
+                <span>Öğrenci ekle</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">E</span>
+                <span>Eğitmen ekle</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">P</span>
+                <span>Program ekle</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">M</span>
+                <span>Ödeme al</span>
+            </div>
+            <div class="shortcut-item">
+                <span class="shortcut-key">S</span>
+                <span>Sınıf oluştur</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Sürücü Kursu Yönetim Sistemi | Tüm hakları saklıdır
+    </footer>
+
+    <script>
+        // Klavye kısayolları için event listener
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'o' || e.key === 'O') {
+                window.location.href = 'ogrenci_ekle.html';
+            }
+            if (e.key === 'e' || e.key === 'E') {
+                window.location.href = 'egitmen_ekle.html';
+            }
+            if (e.key === 'p' || e.key === 'P') {
+                window.location.href = 'ders_programi_ekle1.php';
+            }
+            if (e.key === 'm' || e.key === 'M') {
+                window.location.href = 'odeme_ekle.php';
+            }
+            if (e.key === 's' || e.key === 'S') {
+                window.location.href = 'sinif_olustur1.php';
+            }
+        });
+    </script>
 </body>
 </html>

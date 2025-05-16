@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ders Programı Seçimi</title>
+    <title>Eğitmen Ekle</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -11,26 +11,9 @@
             padding: 20px;
             background-color: #f0f2f5;
             color: #2c3e50;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M50 20c16.569 0 30 13.431 30 30 0 16.569-13.431 30-30 30-16.569 0-30-13.431-30-30 0-16.569 13.431-30 30-30zm0 10c-11.046 0-20 8.954-20 20s8.954 20 20 20 20-8.954 20-20-8.954-20-20-20zm0 5c8.284 0 15 6.716 15 15s-6.716 15-15 15-15-6.716-15-15 6.716-15 15-15zm0 25c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10z'/%3E%3C/g%3E%3C/svg%3E");
-            background-repeat: repeat;
-            opacity: 0.3;
-            pointer-events: none;
         }
 
         .container {
-            position: relative;
-            z-index: 1;
             max-width: 600px;
             margin: 0 auto;
             background: white;
@@ -118,52 +101,42 @@
 </head>
 <body>
     <div class="container">
-        <h2>📅 Ders Programı Oluştur</h2>
+        <h2>👨‍🏫 Eğitmen Ekle</h2>
         
-        <form method="POST" action="ders_programi_ekle.php">
+        <form method="POST" action="egitmen_ekle.php">
             <div class="form-group">
-                <label for="brans_id">Branş (Ders) Seçin</label>
-                <select id="brans_id" name="brans_id" required>
-                    <?php
-                    include 'baglanti.php';
-                    $sql = "SELECT id, brans FROM egitmenler";
-                    $result = $conn->query($sql);
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='".$row['id']."'>".$row['brans']."</option>";
-                    }
-                    ?>
-                </select>
+                <label for="ad">Ad</label>
+                <input type="text" id="ad" name="ad" required placeholder="Eğitmenin adını girin">
             </div>
 
             <div class="form-group">
-                <label for="gun">Gün Seçin</label>
-                <select id="gun" name="gun" required>
-                    <option value="Pazartesi">Pazartesi</option>
-                    <option value="Salı">Salı</option>
-                    <option value="Çarşamba">Çarşamba</option>
-                    <option value="Perşembe">Perşembe</option>
-                    <option value="Cuma">Cuma</option>
-                    <option value="Cumartesi">Cumartesi</option>
-                </select>
+                <label for="soyad">Soyad</label>
+                <input type="text" id="soyad" name="soyad" required placeholder="Eğitmenin soyadını girin">
             </div>
 
             <div class="form-group">
-                <label for="saat">Saat Seçin</label>
-                <input type="time" id="saat" name="saat" required>
+                <label for="tc">TC Kimlik No</label>
+                <input type="text" id="tc" name="tc" required placeholder="TC kimlik numarasını girin" pattern="[0-9]{11}" maxlength="11">
             </div>
 
             <div class="form-group">
-                <label for="sinif_id">Sınıf Seçin</label>
-                <select id="sinif_id" name="sinif_id" required>
-                    <?php
-                    // Sadece silinmemiş sınıfları listele
-                    $sql = "SELECT id, sinif_adi FROM siniflar WHERE silindi = 0";
-                    $result = $conn->query($sql);
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='".$row['id']."'>".$row['sinif_adi']."</option>";
-                    }
-                    ?>
-                </select>
+                <label for="telefon">Telefon</label>
+                <input type="tel" id="telefon" name="telefon" required placeholder="Telefon numarasını girin">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-posta</label>
+                <input type="email" id="email" name="email" required placeholder="E-posta adresini girin">
+            </div>
+
+            <div class="form-group">
+                <label for="brans">Branş</label>
+                <input type="text" id="brans" name="brans" required placeholder="Eğitmenin branşını girin">
+            </div>
+
+            <div class="form-group">
+                <label for="adres">Adres</label>
+                <input type="text" id="adres" name="adres" required placeholder="Adres bilgisini girin">
             </div>
 
             <div class="button-group">
@@ -172,5 +145,28 @@
             </div>
         </form>
     </div>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include 'baglanti.php';
+    
+    $ad = $_POST['ad'];
+    $soyad = $_POST['soyad'];
+    $tc = $_POST['tc'];
+    $telefon = $_POST['telefon'];
+    $email = $_POST['email'];
+    $brans = $_POST['brans'];
+    $adres = $_POST['adres'];
+
+    $sql = "INSERT INTO egitmenler (ad, soyad, tc, telefon, email, brans, adres) 
+            VALUES ('$ad', '$soyad', '$tc', '$telefon', '$email', '$brans', '$adres')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Eğitmen başarıyla eklendi.');</script>";
+    } else {
+        echo "<script>alert('Hata: " . $conn->error . "');</script>";
+    }
+}
+?>
 </body>
-</html>
+</html> 

@@ -1,57 +1,36 @@
 <?php
 include 'baglanti.php';
 
-$mesaj = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Formdan gelen verileri al
-    $brans_id = $_POST['brans_id']; // Eğitmenin branşı (ders)
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $brans_id = $_POST['brans_id'];
     $gun = $_POST['gun'];
     $saat = $_POST['saat'];
-    $sinif_id = $_POST['sinif_id']; // Artık sadece ID geliyor
+    $sinif_id = $_POST['sinif_id'];
 
-    // Veritabanına veri ekleme işlemi
-    $sql = "INSERT INTO ders_programi (brans_id, gun, saat, sinif_id)
-            VALUES ('$brans_id', '$gun', '$saat', '$sinif_id')";
+    // Aynı sınıf, gün ve saatte başka bir ders var mı kontrol et
+    $check_sql = "SELECT * FROM ders_programi WHERE sinif_id = '$sinif_id' AND gun = '$gun' AND saat = '$saat'";
+    $check_result = $conn->query($check_sql);
 
-    if ($conn->query($sql) === TRUE) {
-        $mesaj = "✅ Ders programı başarıyla kaydedildi.";
+    if ($check_result->num_rows > 0) {
+        echo "<script>
+            alert('Bu sınıfta seçilen gün ve saatte başka bir ders bulunmaktadır!');
+            window.location.href = 'ders_programi_ekle1.php';
+        </script>";
     } else {
-        $mesaj = "❌ Hata: " . $conn->error;
+        $sql = "INSERT INTO ders_programi (brans_id, gun, saat, sinif_id) 
+                VALUES ('$brans_id', '$gun', '$saat', '$sinif_id')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<script>
+                alert('Ders programı başarıyla eklendi.');
+                window.location.href = 'ders_programi_listele.php';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Hata: " . $conn->error . "');
+                window.location.href = 'ders_programi_ekle1.php';
+            </script>";
+        }
     }
-
-    $conn->close();
-} else {
-    $mesaj = "❌ Bu sayfa sadece POST isteklerini kabul eder.";
 }
-?>
-
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Ders Programı Ekleme İşlemi</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .btn {
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-<h3><?php echo $mesaj; ?></h3>
-
-<a href="ders_programi_ekle1.php" class="btn">⬅️ Önceki Sayfaya Dön</a>
-
-</body>
-</html>
+?> 
