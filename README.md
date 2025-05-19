@@ -13,6 +13,6 @@ Sınıf işlemleri altında Sınıf oluşturma ve Sınıf Listeleme işlemi bulu
 
 Bu işlemler için Ana Sayfada Kısayol Tuşları Bulunmaktadır.
 
-Her bir sayfada veritabanı Php ile desteklenmiştir.
+Her bir sayfada veritabanı Php ile oluşturulmuştur.
 
 
